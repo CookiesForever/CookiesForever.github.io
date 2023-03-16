@@ -2,8 +2,8 @@
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
 
 async function changeImageSystem(){
-    images=new Array('testImage1.png','testImage2.png');
-    imageLen=2;
+    images=new Array('image3.png','image4.png','image1.jpg','image2.jpg','image3.jpg');
+    imageLen=5;
     count=imageLen-1;
     //changeImage(images[count]);
     for(;;)
