@@ -1,0 +1,77 @@
+*{
+    box-sizing: border-box;
+}
+
+div.header>h1{
+    text-align: center;
+    background-color: rgb(94, 62, 62);
+    width: 100%;
+    height: 100px;
+    text-shadow: 10px;
+    font-size: filled;
+    border: 0px;
+    text-decoration-style:dashed;
+    line-height: 100px;
+}
+
+div.menu{
+    width: 23%;
+    float:left;
+    background-color: rgb(75, 120, 120);
+    border-radius: 4px;
+}
+
+body.body1{
+    background-image: url(BackGround.png);
+    background-repeat:no-repeat;
+    background-size: 100%;
+    
+}
+
+.menu li{
+    background-color: aquamarine;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: bold;
+    text-align: center;
+    line-height: 30px;
+    font-size: 20px;
+    list-style: none;
+    height: 50px;
+    position: relative;
+    transition: 0.34s;
+}
+
+.menu li:hover{
+    background-color: antiquewhite;
+    font-size: 30px;
+    line-height: 65px;
+    height: 70px;
+}
+
+.menu h3{
+    text-align: center;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 25px;
+    border: 0px;
+    margin-top: -10px;
+    margin-bottom: 10px;
+    line-height: 30px;
+}
+
+.menu ul{
+    border: 0px;
+    padding: 0px;
+}
+
+div.MainContent{
+    background-color: azure;
+    width: 53%;
+    height: 478px;
+    float: left;
+    margin-left: 2%;
+}
+
+a:link { text-decoration: none;color: black}
+a:active { text-decoration:none}
+a:hover { text-decoration:none;color: black}
+a:visited { text-decoration: none;color: black}
