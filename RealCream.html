@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>RealCream</title>
+  </head>
+    <body>
+        <pre>
+            <p>
+                {
+                    "id": 6566,
+                    "name": "Fork of New Composed Shader",
+                    "fragment": "precision highp float;\nprecision highp int;\nuniform float pix;\nuniform int width;\nuniform int divisor;\nuniform int mode;\nuniform float m1;\nuniform float m2;\nuniform vec3 color;\nvec4 screen_space_mod_pattern_div1678954493925_917_main() \n                {\n                    vec4 screen_space_mod_pattern_div1678954493925_917_gl_FragColor = vec4(0.0);\n                    float x = floor(gl_FragCoord.x / pix);\n                    float y = floor(gl_FragCoord.y / pix);\n                    float w = float(width) / float(divisor);\n                    if (mode == 0) \n                    {\n                        w = float(width) + 1.0 / float(divisor);\n                    }\n                     vec3 outColor = vec3(0.0);\n                    float m = mod(x * y, w);\n                    if (m < m1) \n                    {\n                        outColor = color;\n                    }\n else if (m < m2) \n                    {\n                        outColor = color * 0.5;\n                    }\n                     screen_space_mod_pattern_div1678954493925_917_gl_FragColor = vec4(outColor, 1.0);\n                    return screen_space_mod_pattern_div1678954493925_917_gl_FragColor *= 1.0;\n                }\nvoid main() \n                {\n                    gl_FragColor = screen_space_mod_pattern_div1678954493925_917_main();                }\n",
+                    "vertex": "precision highp float;\nprecision highp int;\nuniform mat4 modelMatrix;\nuniform mat4 modelViewMatrix;\nuniform mat4 projectionMatrix;\nuniform mat4 viewMatrix;\nuniform mat3 normalMatrix;\nattribute vec3 position;\nvec4 screen_space_mod_pattern_div1678954493925_917_main() \n                {\n                    vec4 screen_space_mod_pattern_div1678954493925_917_gl_Position = vec4(0.0);\n                    screen_space_mod_pattern_div1678954493925_917_gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n                    return screen_space_mod_pattern_div1678954493925_917_gl_Position *= 1.0;\n                }\nvoid main() \n                {\n                    gl_Position = screen_space_mod_pattern_div1678954493925_917_main();                }\n",
+                    "uniforms": {
+                      "color": {
+                        "value": {
+                          "r": 0.6039215686274509,
+                          "g": 0.803921568627451,
+                          "b": 0.8549019607843137
+                        },
+                        "type": "c",
+                        "glslType": "vec3"
+                      },
+                      "width": {
+                        "value": "4",
+                        "type": "i",
+                        "glslType": "int"
+                      },
+                      "m1": {
+                        "value": "0.37375513",
+                        "type": "f",
+                        "glslType": "float"
+                      },
+                      "m2": {
+                        "value": "2.05974142",
+                        "type": "f",
+                        "glslType": "float"
+                      },
+                      "pix": {
+                        "value": "1",
+                        "type": "f",
+                        "glslType": "float"
+                      },
+                      "divisor": {
+                        "value": "9",
+                        "type": "i",
+                        "glslType": "int"
+                      },
+                      "mode": {
+                        "value": "0",
+                        "type": "i",
+                        "glslType": "int"
+                      }
+                    },
+                    "url": "http://shaderfrog.com/app/view/6566",
+                    "user": {
+                      "username": "yds",
+                      "url": "http://shaderfrog.com/app/profile/andrewray"
+                    }
+                  }
+            </p>
+        </pre>
+    </body>
+</html>

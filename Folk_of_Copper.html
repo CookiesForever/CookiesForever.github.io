@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Folk_of_Copper</title>
+  </head>
+    <body>
+        <pre>
+            <p>
+                {
+                    "id": 6557,
+                    "name": "Fork of Copper",
+                    "fragment": "precision highp float;\nprecision highp int;\nuniform float time;\nuniform float speed;\nuniform vec3 color1;\nuniform vec3 color2;\nuniform vec3 color3;\nuniform vec3 color4;\nuniform mat4 modelMatrix;\nuniform mat4 modelViewMatrix;\nuniform mat4 projectionMatrix;\nuniform mat4 viewMatrix;\nuniform mat3 normalMatrix;\nuniform sampler2D envMap;\nuniform vec3 cameraPosition;\nuniform vec3 color;\nuniform vec3 lightPosition;\nuniform vec3 lightColor;\nuniform float intensity;\nuniform float roughness;\nuniform float metalness;\nvarying vec2 Configurable_Oil_Spill1568134148426_43_vUv;\nvarying vec3 Configurable_Oil_Spill1568134148426_43_vPosition;\nvarying vec3 Configurable_Oil_Spill1568134148426_43_vNormal;\nfloat rand(vec2 n) \n                {\n                    return fract(cos(dot(n, vec2(12.5, 12.10))) * 12.0001);\n                }\nfloat noise(vec2 n) \n                {\n                    const vec2 d = vec2(0.0, 1.0);\n                    vec2 b = floor(n), f = smoothstep(vec2(0.0), vec2(1.0), fract(n));\n                    return mix(mix(rand(b), rand(b + d.yx), f.x), mix(rand(b + d.xy), rand(b + d.yy), f.x), f.y);\n                }\nfloat fbm(vec2 n) \n                {\n                    float total = 0.0, amplitude = 1.0;\n                    for (int i = 0;\n i < 7; i++) \n                    {\n                        total += noise(n) * amplitude;\n                        n += n;\n                        amplitude *= 0.5;\n                    }\n                    return total;\n                }\nvarying vec3 Unreal1568200830599_47_vPosition;\nvarying vec3 Unreal1568200830599_47_vNormal;\nvarying vec2 Unreal1568200830599_47_vUv;\nvarying vec2 vUv2;\nconst float PI = 3.141592653;\nconst float invPI = 0.31830988618;\nfloat D_Func(vec3 N, vec3 H, float a) \n                {\n                    float a2 = a * a;\n                    float NdotH = max(dot(N, H), 0.0);\n                    float NdotH2 = NdotH * NdotH;\n                    float nom = a2;\n                    float denom = (NdotH2 * (a2 - 1.0) + 1.0);\n                    denom = PI * denom * denom;\n                    return nom / denom;\n                }\nfloat GeometrySchlickGGX(float NdotV, float k) \n                {\n                    float nom = NdotV;\n                    float denom = NdotV * (1.0 - k) + k;\n                    return nom / denom;\n                }\nfloat G_Func(float NdotL, float NdotV, float a) \n                {\n                    float k = (a + 1.) * (a + 1.) * .125;\n                    float ggx1 = GeometrySchlickGGX(NdotV, k);\n                    float ggx2 = GeometrySchlickGGX(NdotL, k);\n                    return ggx1 * ggx2;\n                }\nvec3 F_Func(vec3 H, vec3 V, vec3 F0) \n                {\n                    return F0 + (1.0 - F0) * pow(1.0 - max(dot(H, V), 0.0), 5.0);\n                }\nvec3 gamma(vec3 i) \n                {\n                    return pow(i, vec3(2.2));\n                }\nvec3 tangent(vec3 i) \n                {\n                    return (i + 1.0) * 0.5;\n                }\nvec3 fetEnvMap(vec3 direction, sampler2D map) \n                {\n                    vec2 coord = vec2(1.0 - (PI + atan(direction.z, direction.x)) / (2.0 * 3.141592), acos(direction.y) / 3.141592);\n                    return texture2D(map, coord).rgb;\n                }\nvec4 Configurable_Oil_Spill1568134148426_43_main() \n                {\n                    vec4 Configurable_Oil_Spill1568134148426_43_gl_FragColor = vec4(0.0);\n                    const vec3 c5 = vec3(0.1);\n                    const vec3 c6 = vec3(0.9);\n                    vec2 p = Configurable_Oil_Spill1568134148426_43_vPosition.xz * 1.0;\n                    float timed = time * speed;\n                    float q = fbm(p - timed * 0.1);\n                    vec2 r = vec2(fbm(p + q + timed * 0.7 - p.x - p.y), fbm(p + q - timed * 0.4));\n                    vec3 c = mix(color1, color2, fbm(p + r)) + mix(color3, color4, r.x) - mix(c5, c6, r.y);\n                    Configurable_Oil_Spill1568134148426_43_gl_FragColor = vec4(c * cos(1.57 * Configurable_Oil_Spill1568134148426_43_vUv.y), 1.0);\n                    return Configurable_Oil_Spill1568134148426_43_gl_FragColor *= 1.0;\n                }\nvec4 Unreal1568200830599_47_main() \n                {\n                    vec4 Unreal1568200830599_47_gl_FragColor = vec4(0.0);\n                    vec3 worldPosition = (modelMatrix * vec4(Unreal1568200830599_47_vPosition, 1.0)).xyz;\n                    vec3 worldNormal = normalize(vec3(modelMatrix * vec4(Unreal1568200830599_47_vNormal, 0.0)));\n                    vec3 diffuse = color * invPI;\n                    vec3 N = worldNormal;\n                    vec3 V = normalize(cameraPosition - worldPosition);\n                    vec3 L = normalize(lightPosition - worldPosition);\n                    vec3 H = normalize(L + V);\n                    vec3 R = reflect(V, N);\n                    float NdotL = max(dot(N, L), 0.0);\n                    float NdotV = max(dot(N, V), 0.0);\n                    float lightDistance = length(V);\n                    vec3 lightFactor = lightColor * intensity / lightDistance;\n                    float D = D_Func(N, H, roughness);\n                    float G = G_Func(NdotL, NdotV, roughness);\n                    vec3 F0 = vec3(0.04);\n                    F0 = mix(F0, color, metalness);\n                    vec3 F = F_Func(N, V, F0);\n                    vec3 env = fetEnvMap(R, envMap);\n                    vec3 specular = max(vec3(G * D) * F / (NdotV * NdotL * 4.0), 0.0);\n                    Unreal1568200830599_47_gl_FragColor = vec4(gamma(env * metalness + (1. - metalness) * (diffuse + specular) * lightFactor), 1.0);\n                    return Unreal1568200830599_47_gl_FragColor *= 0.1;\n                }\nvoid main() \n                {\n                    gl_FragColor = (Configurable_Oil_Spill1568134148426_43_main() + Unreal1568200830599_47_main());                }\n",
+                    "vertex": "precision highp float;\nprecision highp int;\nuniform mat4 modelMatrix;\nuniform mat4 modelViewMatrix;\nuniform mat4 projectionMatrix;\nuniform mat4 viewMatrix;\nuniform mat3 normalMatrix;\nuniform vec3 cameraPosition;\nuniform float time;\nattribute vec3 position;\nattribute vec3 normal;\nattribute vec2 uv;\nattribute vec2 uv2;\nvarying vec2 Configurable_Oil_Spill1568134148426_43_vUv;\nvarying vec3 Configurable_Oil_Spill1568134148426_43_vPosition;\nvarying vec3 Configurable_Oil_Spill1568134148426_43_vNormal;\nvarying vec3 Unreal1568200830599_47_vPosition;\nvarying vec3 Unreal1568200830599_47_vNormal;\nvarying vec2 Unreal1568200830599_47_vUv;\nvarying vec2 vUv2;\nvec4 Configurable_Oil_Spill1568134148426_43_main() \n                {\n                    vec4 Configurable_Oil_Spill1568134148426_43_gl_Position = vec4(0.0);\n                    Configurable_Oil_Spill1568134148426_43_vUv = uv;\n                    Configurable_Oil_Spill1568134148426_43_vPosition = position;\n                    Configurable_Oil_Spill1568134148426_43_vNormal = normal;\n                    Configurable_Oil_Spill1568134148426_43_gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n                    return Configurable_Oil_Spill1568134148426_43_gl_Position *= 1.0;\n                }\nvec4 Unreal1568200830599_47_main() \n                {\n                    vec4 Unreal1568200830599_47_gl_Position = vec4(0.0);\n                    Unreal1568200830599_47_vNormal = normal;\n                    Unreal1568200830599_47_vUv = uv;\n                    vUv2 = uv2;\n                    Unreal1568200830599_47_vPosition = position;\n                    Unreal1568200830599_47_gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n                    return Unreal1568200830599_47_gl_Position *= 0.1;\n                }\nvoid main() \n                {\n                    gl_Position = Configurable_Oil_Spill1568134148426_43_main() + Unreal1568200830599_47_main();                }\n",
+                    "uniforms": {
+                      "time": {
+                        "type": "f",
+                        "glslType": "float"
+                      },
+                      "color1": {
+                        "value": {
+                          "r": 0,
+                          "g": 0,
+                          "b": 0
+                        },
+                        "type": "c",
+                        "glslType": "vec3"
+                      },
+                      "color2": {
+                        "value": {
+                          "r": 0.7019607843137254,
+                          "g": 0.33725490196078434,
+                          "b": 0
+                        },
+                        "type": "c",
+                        "glslType": "vec3"
+                      },
+                      "color3": {
+                        "value": {
+                          "r": 1,
+                          "g": 0,
+                          "b": 0
+                        },
+                        "type": "c",
+                        "glslType": "vec3"
+                      },
+                      "color4": {
+                        "value": {
+                          "r": 0.43529411764705883,
+                          "g": 0.20784313725490197,
+                          "b": 0.1843137254901961
+                        },
+                        "type": "c",
+                        "glslType": "vec3"
+                      },
+                      "speed": {
+                        "value": "0",
+                        "type": "f",
+                        "glslType": "float"
+                      },
+                      "cameraPosition": {
+                        "type": "v3",
+                        "glslType": "vec3"
+                      },
+                      "lightPosition": {
+                        "value": {
+                          "x": 0,
+                          "y": 1.25,
+                          "z": 1.25
+                        },
+                        "type": "v3",
+                        "glslType": "vec3"
+                      },
+                      "roughness": {
+                        "value": "1",
+                        "type": "f",
+                        "glslType": "float"
+                      },
+                      "metalness": {
+                        "value": "0",
+                        "type": "f",
+                        "glslType": "float"
+                      },
+                      "lightColor": {
+                        "value": {
+                          "r": 1,
+                          "g": 0.7215686274509804,
+                          "b": 0.7215686274509804
+                        },
+                        "type": "c",
+                        "glslType": "vec3"
+                      },
+                      "intensity": {
+                        "value": "9",
+                        "type": "f",
+                        "glslType": "float"
+                      },
+                      "envMap": {
+                        "value": null,
+                        "type": "t",
+                        "glslType": "sampler2D"
+                      },
+                      "color": {
+                        "value": {
+                          "r": 1,
+                          "g": 0.8196078431372549,
+                          "b": 0.8196078431372549
+                        },
+                        "type": "c",
+                        "glslType": "vec3"
+                      }
+                    },
+                    "url": "http://shaderfrog.com/app/view/6557",
+                    "user": {
+                      "username": "yds",
+                      "url": "http://shaderfrog.com/app/profile/andrewray"
+                    }
+                  }
+            </p>
+        </pre>
+    </body>
+</html>
