@@ -1,0 +1,46 @@
+.list li{
+    background-color: aquamarine;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: bold;
+    text-align: center;
+    line-height: 30px;
+    font-size: 20px;
+    list-style: none;
+    height: 50px;
+    position: relative;
+    transition: 0.34s;
+}
+
+.list li:hover{
+    background-color: antiquewhite;
+    font-size: 30px;
+    line-height: 65px;
+    height: 70px;
+}
+
+.list h3{
+    text-align: center;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 25px;
+    border: 0px;
+    margin-bottom: 10px;
+    line-height: 30px;
+}
+
+.list ul{
+    border: 0px;
+    padding: 0px;
+}
+
+
+a:link { text-decoration: none;color: black}
+a:active { text-decoration:none}
+a:hover { text-decoration:none;color: black}
+a:visited { text-decoration: none;color: black}
+
+div.list{
+    width: 100%;
+    float:left;
+    background-color: rgb(75, 120, 120);
+    border-radius: 4px;
+}

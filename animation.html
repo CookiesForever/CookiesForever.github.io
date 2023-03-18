@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <pre><p>var runtime = new ShaderFrogRuntime(),
+            width = 800, height = 600,
+            clock = new THREE.Clock(),
+            camera, cubeCamera, scene, renderer,cubeCamera;
+        var materialChun;
+        // Load multiple ShaderFrog shaders
+        runtime.load([
+            'Reflection_Cube_Map.json',
+            'Water_or_Oil.json',
+            'DarkCookie.json',
+            'Fork_of_Copper.json',
+            'RealCreamTest0_04_6.json',
+            'Fork_of_New_Composed_Shader.json',
+        ],
+            function (shaders) {
+                materialBottom = runtime.get(shaders[2].name);
+                materialInterlayer = runtime.get(shaders[3].name)
+                materialChun = runtime.get(shaders[4].name);
+                materialPlate = runtime.get(shaders[5].name);
+        });
+        
+        init();
+        animate();
+        
+        function init() {
+        
+            scene = new THREE.Scene();
+        
+            // Cameras
+            camera = new THREE.PerspectiveCamera( 50, width / height, 1, 10000 );
+            camera.position.z = 100;
+            scene.add( camera );
+            runtime.registerCamera( camera );
+        
+            cubeCamera = new THREE.CubeCamera( 0.1, 10000, 128 );
+            scene.add( cubeCamera );
+        
+            // Main object
+        
+        
+        
+            var loader = new THREE.STLLoader();
+        
+            loader.load('BigPlate.stl', function (geometry) {
+                var mesh1 = new THREE.Mesh(geometry, materialPlate);
+                mesh1.position.set(0, -24, 60);
+                mesh1.rotation.set(80, 0, 90);
+                mesh1.name = 'plate';
+                scene.add(mesh1);
+        
+        
+                // Adjust the camera position and look at the mesh
+        
+            });
+        
+            loader.load('Bottom.stl', function (geometry) {
+                var mesh2 = new THREE.Mesh(geometry, materialBottom);
+                mesh2.position.set(-3.5,-3,60);
+                mesh2.rotation.set(0,0,-0.3);
+                mesh2.name = 'bottom';
+                scene.add(mesh2);
+        
+                // Adjust the camera position and look at the mesh
+        
+            });
+        
+            loader.load('FCInterlayer.stl', function (geometry) {
+                var mesh = new THREE.Mesh(geometry, materialInterlayer);
+                mesh.position.set(-3.5, -3, 60);
+                mesh.rotation.set(0, 0, -0.3);
+                scene.add(mesh);
+        
+                // Adjust the camera position and look at the mesh
+        
+            });
+        
+            loader.load('Chun.stl', function (geometry) {
+                var mesh = new THREE.Mesh(geometry, materialChun);
+                mesh.position.set(-3.5, -3, 60);
+                mesh.rotation.set(0, 0, -0.3);
+                scene.add(mesh);
+        
+                // Adjust the camera position and look at the mesh
+        
+            });
+        
+            loader.load('Bottom.stl', function (geometry) {
+                var mesh = new THREE.Mesh(geometry, materialBottom);
+                mesh.position.set(-9.5, -3, 61);
+                mesh.rotation.set(0, 0, 0.2);
+                scene.add(mesh);
+        
+                // Adjust the camera position and look at the mesh
+        
+            });
+        
+            loader.load('FCInterlayer.stl', function (geometry) {
+                var mesh = new THREE.Mesh(geometry, materialInterlayer);
+                mesh.position.set(-9.5, -3, 61);
+                mesh.rotation.set(0, 0, 0.2);
+                scene.add(mesh);
+        
+                // Adjust the camera position and look at the mesh
+        
+            });
+        
+            loader.load('Chun.stl', function (geometry) {
+                var mesh = new THREE.Mesh(geometry, materialChun);
+                mesh.position.set(-9.5, -3, 61);
+                mesh.rotation.set(0, 0, 0.2);
+                scene.add(mesh);
+        
+                // Adjust the camera position and look at the mesh
+        
+            });
+           
+            renderer = new THREE.WebGLRenderer();
+            renderer.setSize( width, height );
+            document.getElementById( 'canvas' ).appendChild( renderer.domElement );
+        
+        }
+        
+        function animate() {
+            requestAnimationFrame( animate );
+        
+            const mesh2 = scene.getObjectByName('bottom');
+            //write the reference of the object
+            //since all of the object's part are on the same position,
+            //we can just call one of them, then we chose the bottom part of the object
+        
+            const cameraX = Math.sin(Date.now()*0.0008)*65;
+            //asking the camera on the X-coordinate make the circling motion
+            const cameraZ = Math.cos(Date.now()*0.0008)*65;
+            //asking the camera on the Z-coordinate make the circling motion
+            
+            camera.position.set(mesh2.position.x + cameraX, mesh2.position.y, mesh2.position.z + cameraZ);
+            camera.lookAt(mesh2.position);
+            //keep the camera always stick with the object
+            camera.position.y += 1;
+            //since the camera is a little bit lower than the object, so we moive it up by adding 5 in Y-coordinate
+            render();
+        
+        }
+        
+        function render() {
+            var time = clock.getElapsedTime();
+            runtime.updateShaders( time );
+            cubeCamera.updateCubeMap( renderer, scene );  
+            renderer.render( scene, camera );
+        
+        }
+        </p>
+    </pre>
+    </body>
+</html>
